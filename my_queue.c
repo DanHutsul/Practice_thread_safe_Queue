@@ -6,6 +6,9 @@
 
 my_queue_t queues[LENGTH];
 int my_queue_init(int size, my_queue_t *q) {
+    if (size <= 0) {
+        return -1;
+    }
     for (int i = 0; i < LENGTH; i++) {
         if (!queues[i]) {
             printf("i = %d\n",i);
