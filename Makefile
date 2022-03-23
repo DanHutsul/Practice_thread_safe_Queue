@@ -1,6 +1,6 @@
 CC = gcc
 
-my_queue_t.so: my_queue_t.o
+libmy_queue.so: my_queue.o
 	$(CC) -fPIC -shared -pthread my_queue.o -o libmy_queue.so
 
 clean:

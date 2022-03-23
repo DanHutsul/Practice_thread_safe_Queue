@@ -11,7 +11,6 @@ int my_queue_init(int size, my_queue_t *q) {
     }
     for (int i = 0; i < LENGTH; i++) {
         if (!queues[i]) {
-            printf("i = %d\n",i);
             queues[i] = malloc(sizeof(**q));
             *q = queues[i];
             queues[i]->size = size;
@@ -31,7 +30,7 @@ int my_queue_uninit(my_queue_t q) {
         return -1;
     }
     for (int i = 0; i < LENGTH; i++) {
-        if (&*queues[i] == &*q) {
+        if (queues[i] == q) {
             sem_destroy(&q->semaphore);
             pthread_mutex_destroy(&q->lock);
             q->size = 0;
@@ -51,7 +50,7 @@ int my_queue_write(my_queue_t q, int val) { //! Only lock semaphore, unlocking i
         return -1;
     }
     for (int i = 0; i < LENGTH; i++) {
-        if (&*queues[i] == &*q) {
+        if (queues[i] == q) {
             sem_wait(&q->semaphore); //! Decrement semaphore - One less empty space in Queue
             pthread_mutex_lock(&q->lock); //! Lock to prevent unwanted change to indexes
             if (q->write == -1 && q->read == -1) { //! Empty Queue
