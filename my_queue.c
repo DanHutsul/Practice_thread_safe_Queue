@@ -72,14 +72,15 @@ int my_queue_read(my_queue_t q, int *val) {
     }
     for (int i = 0; i < LENGTH; i++) {
         if (&*queues[i] == &*q) {
-            int count = 0;
+            int count = q->size;
             while(1) { //! Empty Queue
                 pthread_mutex_lock(&q->lock); //! Lock to prevent unwanted change to indexes
                 sem_getvalue(&q->semaphore, &count);
-                if (count != q->size) {
+                if (count != q->size && q->read != -1) {
                     pthread_mutex_unlock(&q->lock); //! Unlock and repeat loop
                     break;
                 }
+                pthread_mutex_unlock(&q->lock); //! Unlock and repeat loop
             }
             *val = q->array[q->read];
             q->read = (q->read + 1) % q->size;
