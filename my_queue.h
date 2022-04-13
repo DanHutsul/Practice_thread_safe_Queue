@@ -16,6 +16,7 @@ typedef struct {
     int read;
     pthread_mutex_t lock;
     sem_t semaphore; //! Indicates free space
+    sem_t usemaphore; //! Indicates Used space
     int* array;
 } *my_queue_t;
 
